@@ -26,12 +26,8 @@ use Getopt::Long;
 #------------------------------------------------------------#
 
 my $FOODCRITIC_RULE_COUNT = 45;
-my @DEPRECATED_RULES = ( 1, 20, 35);
 my %MESSAGES_BY_RULE = (); # autopopulate as needed
 my %VIOLATIONS_BY_RULE = map { sprintf('FC%03d', $_) => [] } (1..$FOODCRITIC_RULE_COUNT);
-for (@DEPRECATED_RULES) {
-    delete $VIOLATIONS_BY_RULE{sprintf('FC%03d', $_)};
-}
 
 # print join("\n", sort keys %VIOLATIONS_BY_RULE);
 
