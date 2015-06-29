@@ -19,6 +19,9 @@ then
     . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
 
+GIT_PREVIOUS_COMMIT=${1}
+GIT_COMMIT=${2}
+
 # git submodule cookbooks: git submodule | awk '{print $2}' | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///'
 for cbname in `git diff --name-only ${GIT_PREVIOUS_COMMIT} ${GIT_COMMIT} | awk '$1 ~ /^cookbooks/' | awk -F'/' '$3 == "spec"' | awk -F'/' '{print $2}' | uniq`; do
   rm junit_reports/chefspec-${cbname}.xml 2>/dev/null
