@@ -26,5 +26,5 @@ GIT_COMMIT=${2}
 for cbname in `git diff --name-only ${GIT_PREVIOUS_COMMIT} ${GIT_COMMIT} | awk '$1 ~ /^cookbooks/' | awk -F'/' '$3 == "spec"' | awk -F'/' '{print $2}' | uniq`; do
   rm junit_reports/chefspec-${cbname}.xml 2>/dev/null
   echo "------ chefspec checks: $cbname ------"
-  rspec $@ cookbooks/${cbname} --format RspecJunitFormatter --out junit_reports/chefspec-${cbname}.xml
+  rspec cookbooks/${cbname} --format RspecJunitFormatter --out junit_reports/chefspec-${cbname}.xml
 done
