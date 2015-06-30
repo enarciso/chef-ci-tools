@@ -32,7 +32,7 @@ if [ -z "${CHANGED_COOKBOOK_NAMES}" ]; then
 </testcase>
   </testsuite>
 </testsuites>
-    EOF
+EOF
 fi
 
 exit 0
