@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Do not fail to parse cookbooks because of the encoding
 export LC_CTYPE=en_US.UTF-8
