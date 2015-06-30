@@ -21,9 +21,7 @@ then
     . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
 
-CHANGED_COOKBOOK_NAMES=`git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///' | awk -F '[/]' '{print $1}' | uniq`
-
-if [ -z "${CHANGED_COOKBOOK_NAMES}" ]; then
+if [ -z `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///' | awk -F '[/]' '{print $1}' | uniq` ]; then
     cat > junit_reports/foodcritic-dummy.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
@@ -33,12 +31,13 @@ if [ -z "${CHANGED_COOKBOOK_NAMES}" ]; then
   </testsuite>
 </testsuites>
 EOF
+
+    exit 0
 fi
 
-exit 0
 
 # Gets the cookbook names from the git diff
-for cbname in $CHANGED_COOKBOOK_NAMES; do
+for cbname in `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///' | awk -F '[/]' '{print $1}' | uniq`; do
   echo "------ foodcritic checks: $cbname ------"
   $FOODCRITIC cookbooks/$cbname | chef-ci-tools/bin/foodcritic2junit.pl --suite $cbname --out junit_reports/foodcritic-$cbname.xml
 done
