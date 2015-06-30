@@ -21,11 +21,8 @@ then
     . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
 
-GIT_PREVIOUS_COMMIT=${1}
-GIT_COMMIT=${2}
-
 # Gets the cookbook names from the git diff
-for cbname in `git diff --name-only ${GIT_PREVIOUS_COMMIT} ${GIT_COMMIT} | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///' | awk -F '[/]' '{print $1}' | uniq`; do
+for cbname in `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///' | awk -F '[/]' '{print $1}' | uniq`; do
   echo "------ foodcritic checks: $cbname ------"
   $FOODCRITIC cookbooks/$cbname | chef-ci-tools/bin/foodcritic2junit.pl --suite $cbname --out junit_reports/foodcritic-$cbname.xml
 done
