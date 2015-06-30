@@ -26,3 +26,15 @@ for cbname in `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | sed -e
   echo "------ foodcritic checks: $cbname ------"
   $FOODCRITIC cookbooks/$cbname | chef-ci-tools/bin/foodcritic2junit.pl --suite $cbname --out junit_reports/foodcritic-$cbname.xml
 done
+
+if [ -z "${1}" ] && [ -z "${2}" ] && [ $(find whatever -maxdepth 0 -type d -empty 2>/dev/null) ]; then
+    cat > junit_reports/foodcritic-dummy.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="dummy" timestamp="">
+<testcase classname="NO_TEST" name="dummy">
+</testcase>
+  </testsuite>
+</testsuites>
+    EOF
+fi
