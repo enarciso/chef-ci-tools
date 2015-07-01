@@ -35,10 +35,10 @@ EOF
     exit 0
 fi
 
+`git checkout ${2}`
 
 # Gets the cookbook names from the git diff
 for cbname in `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///' | awk -F '[/]' '{print $1}' | uniq`; do
-  `git checkout ${2}`
   echo "------ foodcritic checks: $cbname ------"
   $FOODCRITIC cookbooks/$cbname | chef-ci-tools/bin/foodcritic2junit.pl --suite $cbname --out junit_reports/foodcritic-$cbname.xml
 done

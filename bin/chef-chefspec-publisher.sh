@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Do not fail to parse cookbooks because of the encoding
 export LC_CTYPE=en_US.UTF-8
@@ -33,12 +33,13 @@ EOF
     exit 0
 fi
 
+`git checkout ${2}`
+
 # git submodule cookbooks: git submodule | awk '{print $2}' | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///'
 for cbname in `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | awk -F'/' '$3 == "spec"' | awk -F'/' '{print $2}' | uniq`; do
-  `git checkout ${2}`
   echo "------ chefspec checks: $cbname ------"
   rspec cookbooks/${cbname} --format RspecJunitFormatter --out junit_reports/chefspec-${cbname}.xml
-  echo '############## Looping ove cookbooks ##############'
+  echo "------ chefspec checks saved for: $cbname ------"
 done
 
-echo '############## Yay, end of the script ##############'
+echo "------ chefspec checks done ------"
