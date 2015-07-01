@@ -38,4 +38,7 @@ for cbname in `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | awk -F
   `git checkout ${2}`
   echo "------ chefspec checks: $cbname ------"
   rspec cookbooks/${cbname} --format RspecJunitFormatter --out junit_reports/chefspec-${cbname}.xml
+  echo '############## Looping ove cookbooks ##############'
 done
+
+echo '############## Yay, end of the script ##############'
