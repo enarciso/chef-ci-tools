@@ -20,7 +20,7 @@ then
     . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
 
-if [ -z `git diff --name-only ${GIT_PREVIOUS_COMMIT} ${GIT_COMMIT} | awk '$1 ~ /^cookbooks/' | awk -F'/' '$3 == "spec"' | awk -F'/' '{print $2}' | uniq` ]; then
+if [ -z `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | awk -F'/' '$3 == "spec"' | awk -F'/' '{print $2}' | uniq` ]; then
     cat > junit_reports/chefspec-dummy.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="rspec" tests="1" failures="0" errors="0" time="0.001334" timestamp="2015-07-01T12:16:36+02:00">
@@ -34,7 +34,7 @@ EOF
 fi
 
 # git submodule cookbooks: git submodule | awk '{print $2}' | awk '$1 ~ /^cookbooks/' | sed -e 's/cookbooks\///'
-for cbname in `git diff --name-only ${GIT_PREVIOUS_COMMIT} ${GIT_COMMIT} | awk '$1 ~ /^cookbooks/' | awk -F'/' '$3 == "spec"' | awk -F'/' '{print $2}' | uniq`; do
+for cbname in `git diff --name-only ${1} ${2} | awk '$1 ~ /^cookbooks/' | awk -F'/' '$3 == "spec"' | awk -F'/' '{print $2}' | uniq`; do
   `git checkout ${2}`
   echo "------ chefspec checks: $cbname ------"
   rspec cookbooks/${cbname} --format RspecJunitFormatter --out junit_reports/chefspec-${cbname}.xml
